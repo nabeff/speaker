@@ -5,6 +5,12 @@ import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
 
 import { Categories } from './collections/Categories'
+import { EventCategories } from './collections/EventCategories'
+import { Events } from './collections/Events'
+import { PodcastCategories } from './collections/PodcastCategories'
+import { Podcasts } from './collections/Podcasts'
+import { Programs } from './collections/Programs'
+import { Treatments } from './collections/Treatments'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Posts } from './collections/Posts'
@@ -61,7 +67,7 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [Pages, Posts, Events, EventCategories, Podcasts, PodcastCategories, Programs, Treatments, Media, Categories, Users],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -69,7 +75,7 @@ export default buildConfig({
     vercelBlobStorage({
       access: 'public',
       enabled: true,
-      addRandomSuffix: false,
+      clientUploads: process.env.NODE_ENV === 'production',
       collections: {
         media: true,
       },

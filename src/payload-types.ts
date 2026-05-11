@@ -69,6 +69,12 @@ export interface Config {
   collections: {
     pages: Page;
     posts: Post;
+    events: Event;
+    'event-categories': EventCategory;
+    podcasts: Podcast;
+    'podcast-categories': PodcastCategory;
+    programs: Program;
+    treatments: Treatment;
     media: Media;
     categories: Category;
     users: User;
@@ -91,6 +97,12 @@ export interface Config {
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
+    events: EventsSelect<false> | EventsSelect<true>;
+    'event-categories': EventCategoriesSelect<false> | EventCategoriesSelect<true>;
+    podcasts: PodcastsSelect<false> | PodcastsSelect<true>;
+    'podcast-categories': PodcastCategoriesSelect<false> | PodcastCategoriesSelect<true>;
+    programs: ProgramsSelect<false> | ProgramsSelect<true>;
+    treatments: TreatmentsSelect<false> | TreatmentsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
@@ -201,7 +213,42 @@ export interface Page {
       | null;
     media?: (string | null) | Media;
   };
-  layout: (CallToActionBlock | ContentBlock | MediaBlock | ArchiveBlock | FormBlock)[];
+  layout: (
+    | HeroBlock
+    | IntroBlock
+    | MarqueeBlock
+    | FeatureAccordionBlock
+    | VisionBlock
+    | MissionBlock
+    | LogoGridBlock
+    | EngagementBlock
+    | EngagementTextBlock
+    | FAQBlock
+    | FeatureCardBlock
+    | MediaTextBlock
+    | WhoWeServeBlock
+    | SignsListBlock
+    | BenefitsCarouselBlock
+    | IntroCardBlock
+    | TwoImageTextBlock
+    | CoverflowCarouselBlock
+    | ProgramFormatsBlock
+    | BannerCTABlock
+    | EventsListingBlock
+    | PodcastsListingBlock
+    | ContactBlock
+    | ProgramsListingBlock
+    | ProgramsAlternatingGridBlock
+    | TreatmentsCarouselBlock
+    | EventsCarouselBlock
+    | TreatmentsListingBlock
+    | PodcastsCarouselBlock
+    | CallToActionBlock
+    | ContentBlock
+    | MediaBlock
+    | ArchiveBlock
+    | FormBlock
+  )[];
   meta?: {
     title?: string | null;
     /**
@@ -441,24 +488,15 @@ export interface User {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "CallToActionBlock".
+ * via the `definition` "HeroBlock".
  */
-export interface CallToActionBlock {
-  richText?: {
-    root: {
-      type: string;
-      children: {
-        type: any;
-        version: number;
-        [k: string]: unknown;
-      }[];
-      direction: ('ltr' | 'rtl') | null;
-      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-      indent: number;
-      version: number;
-    };
-    [k: string]: unknown;
-  } | null;
+export interface HeroBlock {
+  title: string;
+  description?: string | null;
+  media: string | Media;
+  /**
+   * Add up to two call-to-action buttons. Each button has a variant (Default or Outline) selectable in the admin.
+   */
   links?:
     | {
         link: {
@@ -485,74 +523,89 @@ export interface CallToActionBlock {
     | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'cta';
+  blockType: 'heroBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ContentBlock".
+ * via the `definition` "IntroBlock".
  */
-export interface ContentBlock {
-  columns?:
-    | {
-        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
-        richText?: {
-          root: {
-            type: string;
-            children: {
-              type: any;
-              version: number;
-              [k: string]: unknown;
-            }[];
-            direction: ('ltr' | 'rtl') | null;
-            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
-            indent: number;
-            version: number;
-          };
+export interface IntroBlock {
+  showIcon?: boolean | null;
+  richText: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'introBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock".
+ */
+export interface MarqueeBlock {
+  /**
+   * Phrases scroll horizontally, separated by an accent star. Add as many as you like.
+   */
+  phrases: {
+    text: string;
+    id?: string | null;
+  }[];
+  speed?: ('slow' | 'normal' | 'fast') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'marqueeBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureAccordionBlock".
+ */
+export interface FeatureAccordionBlock {
+  heading: string;
+  description?: string | null;
+  image: string | Media;
+  items: {
+    title: string;
+    description?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
           [k: string]: unknown;
-        } | null;
-        enableLink?: boolean | null;
-        link?: {
-          type?: ('reference' | 'custom') | null;
-          newTab?: boolean | null;
-          reference?:
-            | ({
-                relationTo: 'pages';
-                value: string | Page;
-              } | null)
-            | ({
-                relationTo: 'posts';
-                value: string | Post;
-              } | null);
-          url?: string | null;
-          label: string;
-          /**
-           * Choose how the link should be rendered.
-           */
-          appearance?: ('default' | 'outline') | null;
-        };
-        id?: string | null;
-      }[]
-    | null;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    id?: string | null;
+  }[];
   id?: string | null;
   blockName?: string | null;
-  blockType: 'content';
+  blockType: 'featureAccordion';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "MediaBlock".
+ * via the `definition` "VisionBlock".
  */
-export interface MediaBlock {
-  media: string | Media;
-  id?: string | null;
-  blockName?: string | null;
-  blockType: 'mediaBlock';
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "ArchiveBlock".
- */
-export interface ArchiveBlock {
-  introContent?: {
+export interface VisionBlock {
+  image: string | Media;
+  heading: string;
+  body?: {
     root: {
       type: string;
       children: {
@@ -567,28 +620,455 @@ export interface ArchiveBlock {
     };
     [k: string]: unknown;
   } | null;
-  populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
-  limit?: number | null;
-  selectedDocs?:
-    | {
-        relationTo: 'posts';
-        value: string | Post;
-      }[]
-    | null;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  imagePosition?: ('left' | 'right') | null;
+  showDecoration?: boolean | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'archive';
+  blockType: 'visionBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "FormBlock".
+ * via the `definition` "MissionBlock".
  */
-export interface FormBlock {
+export interface MissionBlock {
+  /**
+   * e.g. "Our Mission"
+   */
+  heading: string;
+  /**
+   * Shown in orange. e.g. "Expert to Speaker"
+   */
+  subheadingAccent?: string | null;
+  /**
+   * Shown in black, follows the orange text. e.g. "is on a mission to reimagine family mental health care"
+   */
+  subheadingRest?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  showDecorations?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'missionBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoGridBlock".
+ */
+export interface LogoGridBlock {
+  heading?: string | null;
+  headingAlign?: ('left' | 'center' | 'right') | null;
+  columns?: ('3' | '4' | '5') | null;
+  logos: {
+    image: string | Media;
+    name?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'logoGridBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EngagementBlock".
+ */
+export interface EngagementBlock {
+  image: string | Media;
+  heading: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  linkVariant?: ('pill' | 'arrow') | null;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  imagePosition?: ('left' | 'right') | null;
+  showDecorations?: boolean | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'engagementBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EngagementTextBlock".
+ */
+export interface EngagementTextBlock {
+  heading: string;
+  /**
+   * Shown on the right side of the section. Leave empty to show only the decorative blob.
+   */
+  sideImage?: (string | null) | Media;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  linkVariant?: ('pill' | 'arrow') | null;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'engagementTextBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock".
+ */
+export interface FAQBlock {
+  /**
+   * e.g. "Top Questions Answered"
+   */
+  heading: string;
+  /**
+   * Shown in orange under the heading. e.g. "FAQs"
+   */
+  subtitle?: string | null;
+  items: {
+    question: string;
+    answer?: {
+      root: {
+        type: string;
+        children: {
+          type: any;
+          version: number;
+          [k: string]: unknown;
+        }[];
+        direction: ('ltr' | 'rtl') | null;
+        format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+        indent: number;
+        version: number;
+      };
+      [k: string]: unknown;
+    } | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'faqBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureCardBlock".
+ */
+export interface FeatureCardBlock {
+  heading: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  image: string | Media;
+  buttonLabel?: string | null;
+  buttonUrl?: string | null;
+  imagePosition?: ('right' | 'left') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'featureCardBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaTextBlock".
+ */
+export interface MediaTextBlock {
+  image: string | Media;
+  heading: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  imagePosition?: ('left' | 'right') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaTextBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeServeBlock".
+ */
+export interface WhoWeServeBlock {
+  heading: string;
+  items: {
+    image: string | Media;
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'whoWeServeBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SignsListBlock".
+ */
+export interface SignsListBlock {
+  /**
+   * Small text shown above the heading.
+   */
+  intro?: string | null;
+  heading: string;
+  items: {
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'signsListBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BenefitsCarouselBlock".
+ */
+export interface BenefitsCarouselBlock {
+  heading: string;
+  intro?: string | null;
+  items: {
+    title: string;
+    description: string;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'benefitsCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IntroCardBlock".
+ */
+export interface IntroCardBlock {
+  heading: string;
+  intro: string;
+  image: string | Media;
+  imagePosition?: ('right' | 'left') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'introCardBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoImageTextBlock".
+ */
+export interface TwoImageTextBlock {
+  image1: string | Media;
+  image2: string | Media;
+  heading: string;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  buttonLabel?: string | null;
+  buttonUrl?: string | null;
+  imagesPosition?: ('left' | 'right') | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'twoImageTextBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CoverflowCarouselBlock".
+ */
+export interface CoverflowCarouselBlock {
+  slides: {
+    image: string | Media;
+    id?: string | null;
+  }[];
+  /**
+   * Seconds between slides.
+   */
+  autoplaySeconds?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'coverflowCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramFormatsBlock".
+ */
+export interface ProgramFormatsBlock {
+  /**
+   * e.g. "Formats du programme"
+   */
+  heading: string;
+  items: {
+    image: string | Media;
+    title: string;
+    description?: string | null;
+    id?: string | null;
+  }[];
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'programFormatsBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerCTABlock".
+ */
+export interface BannerCTABlock {
+  heading: string;
+  link: {
+    type?: ('reference' | 'custom') | null;
+    newTab?: boolean | null;
+    reference?:
+      | ({
+          relationTo: 'pages';
+          value: string | Page;
+        } | null)
+      | ({
+          relationTo: 'posts';
+          value: string | Post;
+        } | null);
+    url?: string | null;
+    label: string;
+  };
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'bannerCTABlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventsListingBlock".
+ */
+export interface EventsListingBlock {
+  heading: string;
+  perPage?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'eventsListingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PodcastsListingBlock".
+ */
+export interface PodcastsListingBlock {
+  heading: string;
+  perPage?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'podcastsListingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBlock".
+ */
+export interface ContactBlock {
+  heading: string;
+  subheading?: string | null;
+  image?: (string | null) | Media;
+  email?: string | null;
+  phone?: string | null;
+  address?: string | null;
+  /**
+   * Pick a Form to render in this block. Configure fields, submit label, confirmation message, and email notifications in the Forms collection.
+   */
   form: string | Form;
-  enableIntro?: boolean | null;
-  introContent?: {
+  privacyText?: {
     root: {
       type: string;
       children: {
@@ -605,7 +1085,7 @@ export interface FormBlock {
   } | null;
   id?: string | null;
   blockName?: string | null;
-  blockType: 'formBlock';
+  blockType: 'contactBlock';
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -780,6 +1260,439 @@ export interface Form {
     | null;
   updatedAt: string;
   createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramsListingBlock".
+ */
+export interface ProgramsListingBlock {
+  heading: string;
+  /**
+   * How many programs to show.
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'programsListingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramsAlternatingGridBlock".
+ */
+export interface ProgramsAlternatingGridBlock {
+  heading: string;
+  intro?: string | null;
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'programsAlternatingGrid';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TreatmentsCarouselBlock".
+ */
+export interface TreatmentsCarouselBlock {
+  headingStart?: string | null;
+  headingAccent1?: string | null;
+  headingMiddle?: string | null;
+  headingAccent2?: string | null;
+  intro?: string | null;
+  linkLeadText?: string | null;
+  linkAccentText?: string | null;
+  linkUrl?: string | null;
+  /**
+   * How many treatments to load.
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'treatmentsCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventsCarouselBlock".
+ */
+export interface EventsCarouselBlock {
+  heading?: string | null;
+  linkLeadText?: string | null;
+  linkAccentText?: string | null;
+  linkUrl?: string | null;
+  /**
+   * How many events to load.
+   */
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'eventsCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TreatmentsListingBlock".
+ */
+export interface TreatmentsListingBlock {
+  heading: string;
+  intro?: string | null;
+  perPage?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'treatmentsListingBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PodcastsCarouselBlock".
+ */
+export interface PodcastsCarouselBlock {
+  heading?: string | null;
+  linkLeadText?: string | null;
+  linkAccentText?: string | null;
+  linkUrl?: string | null;
+  limit?: number | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'podcastsCarousel';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CallToActionBlock".
+ */
+export interface CallToActionBlock {
+  richText?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  links?:
+    | {
+        link: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'cta';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContentBlock".
+ */
+export interface ContentBlock {
+  columns?:
+    | {
+        size?: ('oneThird' | 'half' | 'twoThirds' | 'full') | null;
+        richText?: {
+          root: {
+            type: string;
+            children: {
+              type: any;
+              version: number;
+              [k: string]: unknown;
+            }[];
+            direction: ('ltr' | 'rtl') | null;
+            format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+            indent: number;
+            version: number;
+          };
+          [k: string]: unknown;
+        } | null;
+        enableLink?: boolean | null;
+        link?: {
+          type?: ('reference' | 'custom') | null;
+          newTab?: boolean | null;
+          reference?:
+            | ({
+                relationTo: 'pages';
+                value: string | Page;
+              } | null)
+            | ({
+                relationTo: 'posts';
+                value: string | Post;
+              } | null);
+          url?: string | null;
+          label: string;
+          /**
+           * Choose how the link should be rendered.
+           */
+          appearance?: ('default' | 'outline') | null;
+        };
+        id?: string | null;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'content';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaBlock".
+ */
+export interface MediaBlock {
+  media: string | Media;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'mediaBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ArchiveBlock".
+ */
+export interface ArchiveBlock {
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  populateBy?: ('collection' | 'selection') | null;
+  relationTo?: 'posts' | null;
+  categories?: (string | Category)[] | null;
+  limit?: number | null;
+  selectedDocs?:
+    | {
+        relationTo: 'posts';
+        value: string | Post;
+      }[]
+    | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'archive';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FormBlock".
+ */
+export interface FormBlock {
+  form: string | Form;
+  enableIntro?: boolean | null;
+  introContent?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  id?: string | null;
+  blockName?: string | null;
+  blockType: 'formBlock';
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events".
+ */
+export interface Event {
+  id: string;
+  title: string;
+  image: string | Media;
+  excerpt: string;
+  subtitle?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  category: string | EventCategory;
+  dateStart: string;
+  dateEnd?: string | null;
+  timeStart?: string | null;
+  timeEnd?: string | null;
+  eventType?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-categories".
+ */
+export interface EventCategory {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "podcasts".
+ */
+export interface Podcast {
+  id: string;
+  title: string;
+  image: string | Media;
+  category: string | PodcastCategory;
+  excerpt: string;
+  subtitle?: string | null;
+  body?: {
+    root: {
+      type: string;
+      children: {
+        type: any;
+        version: number;
+        [k: string]: unknown;
+      }[];
+      direction: ('ltr' | 'rtl') | null;
+      format: 'left' | 'start' | 'center' | 'right' | 'end' | 'justify' | '';
+      indent: number;
+      version: number;
+    };
+    [k: string]: unknown;
+  } | null;
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "podcast-categories".
+ */
+export interface PodcastCategory {
+  id: string;
+  title: string;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "programs".
+ */
+export interface Program {
+  id: string;
+  title: string;
+  /**
+   * Used on the listing page card.
+   */
+  featuredImage: string | Media;
+  /**
+   * Short description shown on the listing card.
+   */
+  excerpt: string;
+  /**
+   * Build the program detail page from blocks.
+   */
+  layout: (
+    | VisionBlock
+    | MarqueeBlock
+    | MediaTextBlock
+    | WhoWeServeBlock
+    | SignsListBlock
+    | BenefitsCarouselBlock
+    | FeatureCardBlock
+  )[];
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "treatments".
+ */
+export interface Treatment {
+  id: string;
+  title: string;
+  /**
+   * Optional — used in listing layouts that show an image.
+   */
+  featuredImage?: (string | null) | Media;
+  /**
+   * Optional short description for listing cards.
+   */
+  excerpt?: string | null;
+  /**
+   * Build the treatment detail page from blocks.
+   */
+  layout: (IntroCardBlock | TwoImageTextBlock | CoverflowCarouselBlock | EngagementTextBlock)[];
+  publishedAt?: string | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -980,6 +1893,30 @@ export interface PayloadLockedDocument {
         value: string | Post;
       } | null)
     | ({
+        relationTo: 'events';
+        value: string | Event;
+      } | null)
+    | ({
+        relationTo: 'event-categories';
+        value: string | EventCategory;
+      } | null)
+    | ({
+        relationTo: 'podcasts';
+        value: string | Podcast;
+      } | null)
+    | ({
+        relationTo: 'podcast-categories';
+        value: string | PodcastCategory;
+      } | null)
+    | ({
+        relationTo: 'programs';
+        value: string | Program;
+      } | null)
+    | ({
+        relationTo: 'treatments';
+        value: string | Treatment;
+      } | null)
+    | ({
         relationTo: 'media';
         value: string | Media;
       } | null)
@@ -1084,6 +2021,35 @@ export interface PagesSelect<T extends boolean = true> {
   layout?:
     | T
     | {
+        heroBlock?: T | HeroBlockSelect<T>;
+        introBlock?: T | IntroBlockSelect<T>;
+        marqueeBlock?: T | MarqueeBlockSelect<T>;
+        featureAccordion?: T | FeatureAccordionBlockSelect<T>;
+        visionBlock?: T | VisionBlockSelect<T>;
+        missionBlock?: T | MissionBlockSelect<T>;
+        logoGridBlock?: T | LogoGridBlockSelect<T>;
+        engagementBlock?: T | EngagementBlockSelect<T>;
+        engagementTextBlock?: T | EngagementTextBlockSelect<T>;
+        faqBlock?: T | FAQBlockSelect<T>;
+        featureCardBlock?: T | FeatureCardBlockSelect<T>;
+        mediaTextBlock?: T | MediaTextBlockSelect<T>;
+        whoWeServeBlock?: T | WhoWeServeBlockSelect<T>;
+        signsListBlock?: T | SignsListBlockSelect<T>;
+        benefitsCarousel?: T | BenefitsCarouselBlockSelect<T>;
+        introCardBlock?: T | IntroCardBlockSelect<T>;
+        twoImageTextBlock?: T | TwoImageTextBlockSelect<T>;
+        coverflowCarousel?: T | CoverflowCarouselBlockSelect<T>;
+        programFormatsBlock?: T | ProgramFormatsBlockSelect<T>;
+        bannerCTABlock?: T | BannerCTABlockSelect<T>;
+        eventsListingBlock?: T | EventsListingBlockSelect<T>;
+        podcastsListingBlock?: T | PodcastsListingBlockSelect<T>;
+        contactBlock?: T | ContactBlockSelect<T>;
+        programsListingBlock?: T | ProgramsListingBlockSelect<T>;
+        programsAlternatingGrid?: T | ProgramsAlternatingGridBlockSelect<T>;
+        treatmentsCarousel?: T | TreatmentsCarouselBlockSelect<T>;
+        eventsCarousel?: T | EventsCarouselBlockSelect<T>;
+        treatmentsListingBlock?: T | TreatmentsListingBlockSelect<T>;
+        podcastsCarousel?: T | PodcastsCarouselBlockSelect<T>;
         cta?: T | CallToActionBlockSelect<T>;
         content?: T | ContentBlockSelect<T>;
         mediaBlock?: T | MediaBlockSelect<T>;
@@ -1103,6 +2069,454 @@ export interface PagesSelect<T extends boolean = true> {
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "HeroBlock_select".
+ */
+export interface HeroBlockSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  media?: T;
+  links?:
+    | T
+    | {
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+              label?: T;
+              appearance?: T;
+            };
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IntroBlock_select".
+ */
+export interface IntroBlockSelect<T extends boolean = true> {
+  showIcon?: T;
+  richText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MarqueeBlock_select".
+ */
+export interface MarqueeBlockSelect<T extends boolean = true> {
+  phrases?:
+    | T
+    | {
+        text?: T;
+        id?: T;
+      };
+  speed?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureAccordionBlock_select".
+ */
+export interface FeatureAccordionBlockSelect<T extends boolean = true> {
+  heading?: T;
+  description?: T;
+  image?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "VisionBlock_select".
+ */
+export interface VisionBlockSelect<T extends boolean = true> {
+  image?: T;
+  heading?: T;
+  body?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  imagePosition?: T;
+  showDecoration?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MissionBlock_select".
+ */
+export interface MissionBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheadingAccent?: T;
+  subheadingRest?: T;
+  body?: T;
+  showDecorations?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "LogoGridBlock_select".
+ */
+export interface LogoGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  headingAlign?: T;
+  columns?: T;
+  logos?:
+    | T
+    | {
+        image?: T;
+        name?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EngagementBlock_select".
+ */
+export interface EngagementBlockSelect<T extends boolean = true> {
+  image?: T;
+  heading?: T;
+  body?: T;
+  linkVariant?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  imagePosition?: T;
+  showDecorations?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EngagementTextBlock_select".
+ */
+export interface EngagementTextBlockSelect<T extends boolean = true> {
+  heading?: T;
+  sideImage?: T;
+  body?: T;
+  linkVariant?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FAQBlock_select".
+ */
+export interface FAQBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subtitle?: T;
+  items?:
+    | T
+    | {
+        question?: T;
+        answer?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "FeatureCardBlock_select".
+ */
+export interface FeatureCardBlockSelect<T extends boolean = true> {
+  heading?: T;
+  body?: T;
+  image?: T;
+  buttonLabel?: T;
+  buttonUrl?: T;
+  imagePosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "MediaTextBlock_select".
+ */
+export interface MediaTextBlockSelect<T extends boolean = true> {
+  image?: T;
+  heading?: T;
+  body?: T;
+  imagePosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "WhoWeServeBlock_select".
+ */
+export interface WhoWeServeBlockSelect<T extends boolean = true> {
+  heading?: T;
+  items?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "SignsListBlock_select".
+ */
+export interface SignsListBlockSelect<T extends boolean = true> {
+  intro?: T;
+  heading?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BenefitsCarouselBlock_select".
+ */
+export interface BenefitsCarouselBlockSelect<T extends boolean = true> {
+  heading?: T;
+  intro?: T;
+  items?:
+    | T
+    | {
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "IntroCardBlock_select".
+ */
+export interface IntroCardBlockSelect<T extends boolean = true> {
+  heading?: T;
+  intro?: T;
+  image?: T;
+  imagePosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TwoImageTextBlock_select".
+ */
+export interface TwoImageTextBlockSelect<T extends boolean = true> {
+  image1?: T;
+  image2?: T;
+  heading?: T;
+  body?: T;
+  buttonLabel?: T;
+  buttonUrl?: T;
+  imagesPosition?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "CoverflowCarouselBlock_select".
+ */
+export interface CoverflowCarouselBlockSelect<T extends boolean = true> {
+  slides?:
+    | T
+    | {
+        image?: T;
+        id?: T;
+      };
+  autoplaySeconds?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramFormatsBlock_select".
+ */
+export interface ProgramFormatsBlockSelect<T extends boolean = true> {
+  heading?: T;
+  items?:
+    | T
+    | {
+        image?: T;
+        title?: T;
+        description?: T;
+        id?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "BannerCTABlock_select".
+ */
+export interface BannerCTABlockSelect<T extends boolean = true> {
+  heading?: T;
+  link?:
+    | T
+    | {
+        type?: T;
+        newTab?: T;
+        reference?: T;
+        url?: T;
+        label?: T;
+      };
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventsListingBlock_select".
+ */
+export interface EventsListingBlockSelect<T extends boolean = true> {
+  heading?: T;
+  perPage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PodcastsListingBlock_select".
+ */
+export interface PodcastsListingBlockSelect<T extends boolean = true> {
+  heading?: T;
+  perPage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ContactBlock_select".
+ */
+export interface ContactBlockSelect<T extends boolean = true> {
+  heading?: T;
+  subheading?: T;
+  image?: T;
+  email?: T;
+  phone?: T;
+  address?: T;
+  form?: T;
+  privacyText?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramsListingBlock_select".
+ */
+export interface ProgramsListingBlockSelect<T extends boolean = true> {
+  heading?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "ProgramsAlternatingGridBlock_select".
+ */
+export interface ProgramsAlternatingGridBlockSelect<T extends boolean = true> {
+  heading?: T;
+  intro?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TreatmentsCarouselBlock_select".
+ */
+export interface TreatmentsCarouselBlockSelect<T extends boolean = true> {
+  headingStart?: T;
+  headingAccent1?: T;
+  headingMiddle?: T;
+  headingAccent2?: T;
+  intro?: T;
+  linkLeadText?: T;
+  linkAccentText?: T;
+  linkUrl?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "EventsCarouselBlock_select".
+ */
+export interface EventsCarouselBlockSelect<T extends boolean = true> {
+  heading?: T;
+  linkLeadText?: T;
+  linkAccentText?: T;
+  linkUrl?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "TreatmentsListingBlock_select".
+ */
+export interface TreatmentsListingBlockSelect<T extends boolean = true> {
+  heading?: T;
+  intro?: T;
+  perPage?: T;
+  id?: T;
+  blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "PodcastsCarouselBlock_select".
+ */
+export interface PodcastsCarouselBlockSelect<T extends boolean = true> {
+  heading?: T;
+  linkLeadText?: T;
+  linkAccentText?: T;
+  linkUrl?: T;
+  limit?: T;
+  id?: T;
+  blockName?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1213,6 +2627,120 @@ export interface PostsSelect<T extends boolean = true> {
         id?: T;
         name?: T;
       };
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "events_select".
+ */
+export interface EventsSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  excerpt?: T;
+  subtitle?: T;
+  body?: T;
+  category?: T;
+  dateStart?: T;
+  dateEnd?: T;
+  timeStart?: T;
+  timeEnd?: T;
+  eventType?: T;
+  phone?: T;
+  email?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "event-categories_select".
+ */
+export interface EventCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "podcasts_select".
+ */
+export interface PodcastsSelect<T extends boolean = true> {
+  title?: T;
+  image?: T;
+  category?: T;
+  excerpt?: T;
+  subtitle?: T;
+  body?: T;
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "podcast-categories_select".
+ */
+export interface PodcastCategoriesSelect<T extends boolean = true> {
+  title?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "programs_select".
+ */
+export interface ProgramsSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  layout?:
+    | T
+    | {
+        visionBlock?: T | VisionBlockSelect<T>;
+        marqueeBlock?: T | MarqueeBlockSelect<T>;
+        mediaTextBlock?: T | MediaTextBlockSelect<T>;
+        whoWeServeBlock?: T | WhoWeServeBlockSelect<T>;
+        signsListBlock?: T | SignsListBlockSelect<T>;
+        benefitsCarousel?: T | BenefitsCarouselBlockSelect<T>;
+        featureCardBlock?: T | FeatureCardBlockSelect<T>;
+      };
+  publishedAt?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "treatments_select".
+ */
+export interface TreatmentsSelect<T extends boolean = true> {
+  title?: T;
+  featuredImage?: T;
+  excerpt?: T;
+  layout?:
+    | T
+    | {
+        introCardBlock?: T | IntroCardBlockSelect<T>;
+        twoImageTextBlock?: T | TwoImageTextBlockSelect<T>;
+        coverflowCarousel?: T | CoverflowCarouselBlockSelect<T>;
+        engagementTextBlock?: T | EngagementTextBlockSelect<T>;
+      };
+  publishedAt?: T;
   generateSlug?: T;
   slug?: T;
   updatedAt?: T;
@@ -1637,8 +3165,10 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
  */
 export interface Header {
   id: string;
+  logo?: (string | null) | Media;
   navItems?:
     | {
+        hasDropdown?: boolean | null;
         link: {
           type?: ('reference' | 'custom') | null;
           newTab?: boolean | null;
@@ -1654,9 +3184,53 @@ export interface Header {
           url?: string | null;
           label: string;
         };
+        dropdownTitle?: string | null;
+        dropdownDescription?: string | null;
+        /**
+         * Choose where dropdown items come from. "Auto" pulls all records from the collection — new entries appear automatically.
+         */
+        dropdownSource?: ('manual' | 'programs' | 'treatments') | null;
+        dropdownItems?:
+          | {
+              link: {
+                type?: ('reference' | 'custom') | null;
+                newTab?: boolean | null;
+                reference?:
+                  | ({
+                      relationTo: 'pages';
+                      value: string | Page;
+                    } | null)
+                  | ({
+                      relationTo: 'posts';
+                      value: string | Post;
+                    } | null);
+                url?: string | null;
+                label: string;
+              };
+              id?: string | null;
+            }[]
+          | null;
         id?: string | null;
       }[]
     | null;
+  cta: {
+    label: string;
+    link?: {
+      type?: ('reference' | 'custom') | null;
+      newTab?: boolean | null;
+      reference?:
+        | ({
+            relationTo: 'pages';
+            value: string | Page;
+          } | null)
+        | ({
+            relationTo: 'posts';
+            value: string | Post;
+          } | null);
+      url?: string | null;
+    };
+    variant?: ('blue' | 'orange') | null;
+  };
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1666,6 +3240,8 @@ export interface Header {
  */
 export interface Footer {
   id: string;
+  logo?: (string | null) | Media;
+  tagline?: string | null;
   navItems?:
     | {
         link: {
@@ -1686,6 +3262,19 @@ export interface Footer {
         id?: string | null;
       }[]
     | null;
+  contact?: {
+    email?: string | null;
+    phone?: string | null;
+    address?: string | null;
+  };
+  socials?:
+    | {
+        platform: 'instagram' | 'linkedin' | 'youtube' | 'x' | 'facebook' | 'tiktok' | 'spotify' | 'apple-podcasts';
+        url: string;
+        id?: string | null;
+      }[]
+    | null;
+  legalText?: string | null;
   updatedAt?: string | null;
   createdAt?: string | null;
 }
@@ -1694,9 +3283,11 @@ export interface Footer {
  * via the `definition` "header_select".
  */
 export interface HeaderSelect<T extends boolean = true> {
+  logo?: T;
   navItems?:
     | T
     | {
+        hasDropdown?: T;
         link?:
           | T
           | {
@@ -1706,7 +3297,38 @@ export interface HeaderSelect<T extends boolean = true> {
               url?: T;
               label?: T;
             };
+        dropdownTitle?: T;
+        dropdownDescription?: T;
+        dropdownSource?: T;
+        dropdownItems?:
+          | T
+          | {
+              link?:
+                | T
+                | {
+                    type?: T;
+                    newTab?: T;
+                    reference?: T;
+                    url?: T;
+                    label?: T;
+                  };
+              id?: T;
+            };
         id?: T;
+      };
+  cta?:
+    | T
+    | {
+        label?: T;
+        link?:
+          | T
+          | {
+              type?: T;
+              newTab?: T;
+              reference?: T;
+              url?: T;
+            };
+        variant?: T;
       };
   updatedAt?: T;
   createdAt?: T;
@@ -1717,6 +3339,8 @@ export interface HeaderSelect<T extends boolean = true> {
  * via the `definition` "footer_select".
  */
 export interface FooterSelect<T extends boolean = true> {
+  logo?: T;
+  tagline?: T;
   navItems?:
     | T
     | {
@@ -1731,6 +3355,21 @@ export interface FooterSelect<T extends boolean = true> {
             };
         id?: T;
       };
+  contact?:
+    | T
+    | {
+        email?: T;
+        phone?: T;
+        address?: T;
+      };
+  socials?:
+    | T
+    | {
+        platform?: T;
+        url?: T;
+        id?: T;
+      };
+  legalText?: T;
   updatedAt?: T;
   createdAt?: T;
   globalType?: T;
@@ -1761,6 +3400,22 @@ export interface TaskSchedulePublish {
       | ({
           relationTo: 'posts';
           value: string | Post;
+        } | null)
+      | ({
+          relationTo: 'events';
+          value: string | Event;
+        } | null)
+      | ({
+          relationTo: 'podcasts';
+          value: string | Podcast;
+        } | null)
+      | ({
+          relationTo: 'programs';
+          value: string | Program;
+        } | null)
+      | ({
+          relationTo: 'treatments';
+          value: string | Treatment;
         } | null);
     global?: string | null;
     user?: (string | null) | User;

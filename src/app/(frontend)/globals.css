@@ -24,6 +24,15 @@
 
 @plugin "@tailwindcss/typography";
 
+@keyframes skeleton-shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
 @source inline("lg:col-span-4");
 @source inline("lg:col-span-6");
 @source inline("lg:col-span-8");
@@ -87,7 +96,19 @@
 }
 
 :root {
-  --background: oklch(100% 0 0deg);
+  /* Brand palette tokens — overridden by [data-palette] below */
+  --brand-bg: #FFFFFF;
+  --brand-text: #0F0F0F;
+  --brand-primary: #FF8A36;
+  --brand-primary-hover: #E07726;
+  --brand-decor-1: #FAF1B8; /* yellow */
+  --brand-decor-2: #E2F0BC; /* green */
+  --brand-soft: #F5EFE2; /* cream surface */
+  --brand-badge: var(--brand-primary);
+  --brand-badge-text: #FFFFFF;
+
+
+  --background: #FFFFFF;
   --foreground: oklch(14.5% 0 0deg);
   --card: oklch(96.5% 0.005 265deg);
   --card-foreground: oklch(14.5% 0 0deg);
@@ -210,7 +231,24 @@
     @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    @apply bg-background text-foreground min-h-[100vh] flex flex-col overflow-x-hidden;
+  }
+  h1, h2, h3, h4, h5, h6,
+  h1 *, h2 *, h3 *, h4 *, h5 *, h6 * {
+    font-family: var(--font-display), system-ui, sans-serif !important;
+    letter-spacing: -0.02em;
+  }
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  a[href],
+  label[for],
+  summary,
+  select {
+    cursor: pointer;
+  }
+  button:disabled,
+  [aria-disabled='true'] {
+    cursor: not-allowed;
   }
 }
 
@@ -222,3 +260,91 @@ html[data-theme='dark'],
 html[data-theme='light'] {
   opacity: initial;
 }
+
+
+/* === Palette presets — switch with [data-palette] on <html> === */
+
+/* 0 — Current (default) */
+html[data-palette='current'] {
+  --brand-bg: #FFFFFF;
+  --brand-text: #0F0F0F;
+  --brand-primary: #FF8A36;
+  --brand-primary-hover: #E07726;
+  --brand-decor-1: #FAF1B8;
+  --brand-decor-2: #E2F0BC;
+  --brand-soft: #F5EFE2;
+  --background: #FFFFFF;
+  --foreground: #0F0F0F;
+}
+
+/* 1 — Editorial warm (terracotta + forest + mustard) */
+html[data-palette='editorial'] {
+  --brand-bg: #F4EDE3;
+  --brand-text: #231C16;
+  --brand-primary: #C45A3C;
+  --brand-primary-hover: #A84830;
+  --brand-decor-1: #F0E2B4;
+  --brand-decor-2: #BBC9B5;
+  --brand-soft: #ECE2D2;
+  --background: #F4EDE3;
+  --foreground: #231C16;
+}
+
+/* 2 — Cool minimal (ocean blue + gold + cool gray) */
+html[data-palette='cool'] {
+  --brand-bg: #FAFAF7;
+  --brand-text: #0F1419;
+  --brand-primary: #1F4D7A;
+  --brand-primary-hover: #163A5C;
+  --brand-decor-1: #F2E5BD;
+  --brand-decor-2: #DCE4EC;
+  --brand-soft: #EFF1ED;
+  --background: #FAFAF7;
+  --foreground: #0F1419;
+}
+
+/* 3 — Mediterranean (burnt orange + peacock + saffron) */
+html[data-palette='mediterranean'] {
+  --brand-bg: #FBF6EE;
+  --brand-text: #1B1815;
+  --brand-primary: #D14F2C;
+  --brand-primary-hover: #B23F22;
+  --brand-decor-1: #F1B946;
+  --brand-decor-2: #0E5E5E;
+  --brand-soft: #F2E9D6;
+  --background: #FBF6EE;
+  --foreground: #1B1815;
+}
+
+/* 4 — Modern wellness elevated (deep emerald + warm orange + oatmeal) */
+html[data-palette='wellness'] {
+  --brand-bg: #F2EEE6;
+  --brand-text: #1F1B17;
+  --brand-primary: #1F5447;
+  --brand-primary-hover: #143A30;
+  --brand-decor-1: #E8DDC4;
+  --brand-decor-2: #E97C3D;
+  --brand-soft: #E5DDC9;
+  --background: #F2EEE6;
+  --foreground: #1F1B17;
+}
+
+/* 5 — Monochrome + accent (cream + tomato accent only) */
+html[data-palette='mono'] {
+  --brand-bg: #F5F1E9;
+  --brand-text: #1A1714;
+  --brand-primary: #E04E2B;
+  --brand-primary-hover: #BD3D1F;
+  --brand-decor-1: #EFE9DA;
+  --brand-decor-2: #1A1714;
+  --brand-soft: #EBE5D5;
+  --background: #F5F1E9;
+  --foreground: #1A1714;
+}
+
+/* Apply the active palette to body + decorative surfaces */
+html[data-palette] body {
+  background-color: var(--brand-bg);
+  color: var(--brand-text);
+}
+

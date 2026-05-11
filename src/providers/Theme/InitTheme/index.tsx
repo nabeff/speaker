@@ -26,20 +26,7 @@ export const InitTheme: React.FC = () => {
       return theme === 'light' || theme === 'dark'
     }
 
-    var themeToSet = '${defaultTheme}'
-    var preference = window.localStorage.getItem('${themeLocalStorageKey}')
-
-    if (themeIsValid(preference)) {
-      themeToSet = preference
-    } else {
-      var implicitPreference = getImplicitPreference()
-
-      if (implicitPreference) {
-        themeToSet = implicitPreference
-      }
-    }
-
-    document.documentElement.setAttribute('data-theme', themeToSet)
+    document.documentElement.setAttribute('data-theme', 'light')
   })();
   `,
       }}

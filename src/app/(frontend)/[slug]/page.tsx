@@ -41,11 +41,18 @@ type Args = {
   params: Promise<{
     slug?: string
   }>
+  searchParams?: Promise<{ [k: string]: string | string[] | undefined }>
 }
 
-export default async function Page({ params: paramsPromise }: Args) {
+export default async function Page({ params: paramsPromise, searchParams: searchParamsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
   const { slug = 'home' } = await paramsPromise
+  const rawSearchParams = (await searchParamsPromise) || {}
+  const searchParams: { [k: string]: string | undefined } = {}
+  for (const [k, v] of Object.entries(rawSearchParams)) {
+    if (typeof v === 'string') searchParams[k] = v
+    else if (Array.isArray(v)) searchParams[k] = v[0]
+  }
   // Decode to support slugs with special characters
   const decodedSlug = decodeURIComponent(slug)
   const url = '/' + decodedSlug
@@ -75,7 +82,7 @@ export default async function Page({ params: paramsPromise }: Args) {
       {draft && <LivePreviewListener />}
 
       <RenderHero {...hero} />
-      <RenderBlocks blocks={layout} />
+      <RenderBlocks blocks={layout} searchParams={searchParams} />
     </article>
   )
 }

@@ -6,6 +6,35 @@ import { Archive } from '../../blocks/ArchiveBlock/config'
 import { CallToAction } from '../../blocks/CallToAction/config'
 import { Content } from '../../blocks/Content/config'
 import { FormBlock } from '../../blocks/Form/config'
+import { HeroBlock } from '../../blocks/HeroBlock/config'
+import { IntroBlock } from '../../blocks/IntroBlock/config'
+import { MarqueeBlock } from '../../blocks/MarqueeBlock/config'
+import { FeatureAccordion } from '../../blocks/FeatureAccordion/config'
+import { VisionBlock } from '../../blocks/VisionBlock/config'
+import { MissionBlock } from '../../blocks/MissionBlock/config'
+import { LogoGridBlock } from '../../blocks/LogoGridBlock/config'
+import { EngagementBlock } from '../../blocks/EngagementBlock/config'
+import { FAQBlock } from '../../blocks/FAQBlock/config'
+import { FeatureCardBlock } from '../../blocks/FeatureCardBlock/config'
+import { MediaTextBlock } from '../../blocks/MediaTextBlock/config'
+import { WhoWeServeBlock } from '../../blocks/WhoWeServeBlock/config'
+import { SignsListBlock } from '../../blocks/SignsListBlock/config'
+import { BenefitsCarousel } from '../../blocks/BenefitsCarousel/config'
+import { IntroCardBlock } from '../../blocks/IntroCardBlock/config'
+import { TwoImageTextBlock } from '../../blocks/TwoImageTextBlock/config'
+import { CoverflowCarousel } from '../../blocks/CoverflowCarousel/config'
+import { EngagementTextBlock } from '../../blocks/EngagementTextBlock/config'
+import { ProgramFormatsBlock } from '../../blocks/ProgramFormatsBlock/config'
+import { BannerCTABlock } from '../../blocks/BannerCTABlock/config'
+import { EventsListingBlock } from '../../blocks/EventsListingBlock/config'
+import { PodcastsListingBlock } from '../../blocks/PodcastsListingBlock/config'
+import { ContactBlock } from '../../blocks/ContactBlock/config'
+import { ProgramsListingBlock } from '../../blocks/ProgramsListingBlock/config'
+import { ProgramsAlternatingGrid } from '../../blocks/ProgramsAlternatingGrid/config'
+import { TreatmentsCarousel } from '../../blocks/TreatmentsCarousel/config'
+import { EventsCarousel } from '../../blocks/EventsCarousel/config'
+import { TreatmentsListingBlock } from '../../blocks/TreatmentsListingBlock/config'
+import { PodcastsCarousel } from '../../blocks/PodcastsCarousel/config'
 import { MediaBlock } from '../../blocks/MediaBlock/config'
 import { hero } from '@/heros/config'
 import { slugField } from 'payload'
@@ -72,7 +101,7 @@ export const Pages: CollectionConfig<'pages'> = {
             {
               name: 'layout',
               type: 'blocks',
-              blocks: [CallToAction, Content, MediaBlock, Archive, FormBlock],
+              blocks: [HeroBlock, IntroBlock, MarqueeBlock, FeatureAccordion, VisionBlock, MissionBlock, LogoGridBlock, EngagementBlock, EngagementTextBlock, FAQBlock, FeatureCardBlock, MediaTextBlock, WhoWeServeBlock, SignsListBlock, BenefitsCarousel, IntroCardBlock, TwoImageTextBlock, CoverflowCarousel, ProgramFormatsBlock, BannerCTABlock, EventsListingBlock, PodcastsListingBlock, ContactBlock, ProgramsListingBlock, ProgramsAlternatingGrid, TreatmentsCarousel, EventsCarousel, TreatmentsListingBlock, PodcastsCarousel, CallToAction, Content, MediaBlock, Archive, FormBlock],
               required: true,
               admin: {
                 initCollapsed: true,
