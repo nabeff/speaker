@@ -4,47 +4,28 @@ import React, { useEffect, useState } from 'react'
 
 const palettes: { key: string; label: string; swatches: string[] }[] = [
   {
-    key: 'current',
-    label: 'Current',
-    swatches: ['#FFFFFF', 'var(--brand-primary)', 'var(--brand-decor-1)', 'var(--brand-decor-2)'],
-  },
-  {
-    key: 'editorial',
-    label: '1 · Editorial',
-    swatches: ['#F4EDE3', '#C45A3C', '#3D5A4A', '#E5C97D'],
-  },
-  {
     key: 'cool',
-    label: '2 · Cool',
+    label: 'Cool',
     swatches: ['#FAFAF7', '#1F4D7A', '#E8B53D', '#E8EDF2'],
   },
   {
-    key: 'mediterranean',
-    label: '3 · Mediterranean',
-    swatches: ['#FBF6EE', '#D14F2C', '#0E5E5E', '#F1B946'],
-  },
-  {
-    key: 'wellness',
-    label: '4 · Wellness',
-    swatches: ['#F2EEE6', '#1F5447', '#E97C3D', '#E8DDC4'],
-  },
-  {
-    key: 'mono',
-    label: '5 · Mono',
-    swatches: ['#F5F1E9', '#E04E2B', '#1A1714', '#EFE9DA'],
+    key: 'editorial',
+    label: 'Editorial',
+    swatches: ['#F4EDE3', '#C45A3C', '#3D5A4A', '#E5C97D'],
   },
 ]
 
 const STORAGE_KEY = 'palette-preview'
 
 export const PaletteSwitcher: React.FC = () => {
-  const [active, setActive] = useState<string>('current')
+  const [active, setActive] = useState<string>('cool')
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
-    const stored = window.localStorage.getItem(STORAGE_KEY) || 'current'
-    setActive(stored)
-    document.documentElement.setAttribute('data-palette', stored)
+    const stored = window.localStorage.getItem(STORAGE_KEY)
+    const valid = stored && palettes.some((p) => p.key === stored) ? stored : 'cool'
+    setActive(valid)
+    document.documentElement.setAttribute('data-palette', valid)
   }, [])
 
   const select = (key: string) => {
@@ -69,7 +50,7 @@ export const PaletteSwitcher: React.FC = () => {
             className="inline-flex w-3 h-3 rounded-full"
             style={{ backgroundColor: 'var(--brand-primary)' }}
           />
-          Palette: {palettes.find((p) => p.key === active)?.label || 'Current'}
+          Palette: {palettes.find((p) => p.key === active)?.label || 'Cool'}
         </button>
       ) : (
         <div className="bg-white rounded-2xl shadow-2xl border border-black/10 p-3 min-w-[260px]">
