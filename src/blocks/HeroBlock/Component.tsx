@@ -27,7 +27,8 @@ export const HeroBlockComponent: React.FC<HeroBlockProps> = ({
       </div>
       <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/40" />
 
-      <div className="container relative z-10 py-20">
+      {/* Offset below centre so the speaker in the photo stays visible. */}
+      <div className="container relative z-10 py-20 mt-[12vh] md:mt-[16vh]">
         <div className="max-w-[40rem] mx-auto text-center">
           {title && (
             <TextReveal

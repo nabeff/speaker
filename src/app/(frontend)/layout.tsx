@@ -32,7 +32,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       className={cn(GeistSans.variable, GeistMono.variable, plusJakarta.variable)}
       lang="en"
       suppressHydrationWarning
-      data-palette="current"
+      data-palette="cool"
     >
       <head>
         <InitTheme />
